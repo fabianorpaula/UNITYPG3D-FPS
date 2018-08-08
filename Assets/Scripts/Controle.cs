@@ -18,7 +18,7 @@ public class Controle : MonoBehaviour {
     float rotationY = 0F;
 
 
-
+    private GameObject Bala2;
 
     public float rotacao = 150;
     public float velocidade = 3;
@@ -28,15 +28,19 @@ public class Controle : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        
+
+
+        Bala = Resources.Load("caramelo") as GameObject;
+
     }
 	
 	// Update is called once per frame
 	void Update () {
         //float x = Input.GetAxis("Horizontal") * Time.deltaTime * rotacao;
         float z = Input.GetAxis("Vertical") * Time.deltaTime * velocidade;
+        float x = Input.GetAxis("Horizontal") * Time.deltaTime * velocidade;
         //transform.Rotate(0, x, 0);
-        transform.Translate(0, 0, z);
+        transform.Translate(x, 0, z);
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -75,5 +79,11 @@ public class Controle : MonoBehaviour {
             transform.localEulerAngles = new Vector3(-rotationY, transform.localEulerAngles.y, 0);
         }
     }
+
+    /*
+    void OnCollisionEnter(Collision colisor)
+    {
+        Debug.Log(colisor.gameObject.name);
+    }*/
 
 }
