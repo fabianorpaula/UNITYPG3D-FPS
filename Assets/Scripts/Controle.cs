@@ -28,7 +28,7 @@ public class Controle : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-
+        Cursor.visible = false;
 
         Bala = Resources.Load("caramelo") as GameObject;
 

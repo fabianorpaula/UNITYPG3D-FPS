@@ -19,7 +19,8 @@ public class Bala : MonoBehaviour {
         //Debug.Log(colisor.gameObject.name);
         if(colisor.gameObject.tag== "Inimigo")
         {
-            Destroy(colisor.gameObject);
+            Destroy(colisor.gameObject, 3f);
+            colisor.gameObject.GetComponent<Zumbi>().Morrer();
             Destroy(this.gameObject);
         }
     }
