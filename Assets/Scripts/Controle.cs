@@ -1,8 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
+
 
 public class Controle : MonoBehaviour {
+
+
+    public GameControl ControladordoJogo;
+
+
 
     //Eixos
     public enum RotationAxes { MouseXAndY = 0, MouseX = 1, MouseY = 2 }
@@ -17,8 +24,13 @@ public class Controle : MonoBehaviour {
     public float maximumY = 60F;
     float rotationY = 0F;
 
+    private AudioSource ArmaTiro;
 
     private GameObject Bala2;
+    private AudioSource Som;
+
+    public AudioMixer ControladordeAudio;
+
 
     public float rotacao = 150;
     public float velocidade = 3;
@@ -28,28 +40,62 @@ public class Controle : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        Cursor.visible = false;
-
+        //Cursor.visible = false;
+        ArmaTiro = GameObject.FindGameObjectWithTag("Arma").GetComponent<AudioSource>();
         Bala = Resources.Load("caramelo") as GameObject;
+        Som = GetComponent<AudioSource>();
+        Som.mute = true;
 
     }
 	
 	// Update is called once per frame
 	void Update () {
-        //float x = Input.GetAxis("Horizontal") * Time.deltaTime * rotacao;
-        float z = Input.GetAxis("Vertical") * Time.deltaTime * velocidade;
-        float x = Input.GetAxis("Horizontal") * Time.deltaTime * velocidade;
-        //transform.Rotate(0, x, 0);
-        transform.Translate(x, 0, z);
 
-        if (Input.GetMouseButtonDown(0))
+        if (ControladordoJogo.pause_game == false)
         {
-            GameObject Disparo = Instantiate(Bala, Saida.transform.position, Quaternion.identity);
-            Disparo.GetComponent<Rigidbody>().AddForce(transform.forward * forcabala);
-            Destroy(Disparo, 2f);
-        }
-        Mouse();
 
+            //float x = Input.GetAxis("Horizontal") * Time.deltaTime * rotacao;
+            float z = Input.GetAxis("Vertical") * Time.deltaTime * velocidade;
+            float x = Input.GetAxis("Horizontal") * Time.deltaTime * velocidade;
+            //transform.Rotate(0, x, 0);
+            transform.Translate(x, 0, z);
+            if (x == 0 && z == 0)
+            {
+                Som.mute = true;
+            }
+            else
+            {
+                Som.mute = false;
+            }
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                GameObject Disparo = Instantiate(Bala, Saida.transform.position, Quaternion.identity);
+                Disparo.GetComponent<Rigidbody>().AddForce(transform.forward * forcabala);
+                ArmaTiro.Play();
+                Destroy(Disparo, 2f);
+            }
+            Mouse();
+            ///Desligar o som
+            ///
+            /*
+            if (Input.GetKeyDown(KeyCode.P))
+            {
+                ControladordeAudio.SetFloat("VolumeMaster", -80f);
+
+            }
+            if (Input.GetKeyDown(KeyCode.O))
+            {
+                ControladordeAudio.SetFloat("VolumeMaster", 0f);
+
+            }*/
+        }
+
+    }
+    
+    public void DesligaSom()
+    {
+        ControladordeAudio.SetFloat("VolumeMaster", -80f);
     }
 
 
