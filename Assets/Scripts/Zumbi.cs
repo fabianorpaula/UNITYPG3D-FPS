@@ -11,6 +11,7 @@ public class Zumbi : MonoBehaviour {
     private AudioSource Som;
 
     private GameControl GameControlador;
+    private float vel;
 
     //Controla a Animação
     Animator anim;
@@ -22,7 +23,7 @@ public class Zumbi : MonoBehaviour {
         Som = GetComponent<AudioSource>();
         Som.mute = true;
         GameControlador = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameControl>();
-        
+        vel = Random.Range(0.005f, 0.05f);
     }
 	
 	// Update is called once per frame
@@ -37,6 +38,8 @@ public class Zumbi : MonoBehaviour {
                 if (distanciazumbi < 1)
                 {
                     anim.SetInteger("Atacar", 2);
+                    transform.LookAt(Jogador.transform.position);
+                    transform.position = Vector3.MoveTowards(transform.position, Jogador.transform.position, vel);
                 }
                 else if (distanciazumbi < 10)
                 {
@@ -44,7 +47,7 @@ public class Zumbi : MonoBehaviour {
                     anim.SetInteger("Andar", 2);
                     anim.SetInteger("Atacar", 1);
                     transform.LookAt(Jogador.transform.position);
-                    transform.position = Vector3.MoveTowards(transform.position, Jogador.transform.position, 0.005f);
+                    transform.position = Vector3.MoveTowards(transform.position, Jogador.transform.position, vel);
 
                 }
                 else
@@ -82,6 +85,8 @@ public class Zumbi : MonoBehaviour {
     {
         anim.SetBool("Morrer", true);
         vivo = false;
+        GameControlador.pontos += 10;
+        GameControlador.qtd_inimigo--;
     }
 
     void Perseguir()

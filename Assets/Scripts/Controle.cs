@@ -38,6 +38,15 @@ public class Controle : MonoBehaviour {
     public GameObject Bala;
     public GameObject Saida;
 
+
+    /// <summary>
+    /// Variaveis do Jogador
+    /// </summary>
+    public int qtd_balas = 50;
+    public int life = 100;
+    //public int pontuacao = 0;
+
+
 	// Use this for initialization
 	void Start () {
         //Cursor.visible = false;
@@ -70,10 +79,15 @@ public class Controle : MonoBehaviour {
 
             if (Input.GetMouseButtonDown(0))
             {
-                GameObject Disparo = Instantiate(Bala, Saida.transform.position, Quaternion.identity);
-                Disparo.GetComponent<Rigidbody>().AddForce(transform.forward * forcabala);
-                ArmaTiro.Play();
-                Destroy(Disparo, 2f);
+                if (qtd_balas > 0)
+                {
+                    GameObject Disparo = Instantiate(Bala, Saida.transform.position, Quaternion.identity);
+                    Disparo.GetComponent<Rigidbody>().AddForce(transform.forward * forcabala);
+                    ArmaTiro.Play();
+                    Destroy(Disparo, 2f);
+                    qtd_balas--;
+                    
+                }
             }
             Mouse();
             ///Desligar o som
@@ -126,10 +140,23 @@ public class Controle : MonoBehaviour {
         }
     }
 
-    /*
+    
     void OnCollisionEnter(Collision colisor)
     {
-        Debug.Log(colisor.gameObject.name);
-    }*/
+        if(colisor.gameObject.tag == "Municao")
+        {
+            Destroy(colisor.gameObject);
+            //qtd_balas = 50;
+            qtd_balas = qtd_balas + 10;
+            if(qtd_balas > 50)
+            {
+                qtd_balas = 50;
+            }
+        }
+        if(colisor.gameObject.tag == "Inimigo")
+        {
+            life--;
+        }
+    }
 
 }
